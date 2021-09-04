@@ -1,0 +1,32 @@
+{
+  "name": "bank",
+  "version": "1.0.0",
+  "description": "Simple bank",
+  "main": "src/index.ts",
+  "scripts": {
+    "build": "rm -rf dist && eslint --ext .ts --fix src && tsc -p .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "bank": "./dist/index.ts"
+  },
+  "author": "pratansyah@gmail.com",
+  "license": "ISC",
+  "dependencies": {
+    "colors": "^1.4.0",
+    "commander": "^8.1.0",
+    "inquirer": "^8.1.2",
+    "typeorm": "^0.2.37"
+  },
+  "engines": {
+    "node": "12.x"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.30.0",
+    "@typescript-eslint/parser": "^4.30.0",
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.22.1",
+    "typescript": "^4.4.2"
+  }
+}
