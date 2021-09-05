@@ -8,9 +8,9 @@ import * as debtUtil from '../utils/debt';
 
 export default async (params: string[]) => {
   if (params.length < 1) {
-    console.log('Please input username');
-    return;
+    return ['Please input username'];
   }
+  const result = [];
   const username = params[0];
   const password = userUtil.getPassword();
   const userRepo = getCustomRepository(UserRepo);
@@ -18,16 +18,16 @@ export default async (params: string[]) => {
   const user = await userRepo.getOne({ where: { username } });
   const debts = await debtRepo.getDebts(user);
   if (!user) {
-    console.log('We can not find that username, please try again');
-  } else {
-    const matchPassword = bcrypt.compareSync(password, user.password);
-    if (matchPassword) {
-      global.user = user;
-      console.log('Hello,', user.fullName);
-      console.log('Your balance is', user.balance);
-      debtUtil.list(debts);
-    } else {
-      console.log('Wrong password');
-    }
+    return ['We can not find that username, please try again'];
   }
+  const matchPassword = bcrypt.compareSync(password, user.password);
+  if (matchPassword) {
+    global.user = user;
+    result.push(`Hello ${user.username}`);
+    result.push(`Your balance is $${user.balance}`);
+    result.push(...debtUtil.list(debts));
+  } else {
+    return ['Wrong password'];
+  }
+  return result;
 };

@@ -4,23 +4,21 @@ import User from '../entities/user';
 
 declare const global: { user: User };
 
-export function isLoggedIn(): boolean {
+export const isLoggedIn = (): boolean => {
   const { user } = global;
   if (user) return true;
   return false;
-}
+};
 
-export function getUser(): User {
-  return global.user;
-}
+export const getUser = (): User => global.user;
 
-export async function refreshUser(userRepo: Repository<User>, id): Promise<any> {
+export const refreshUser = async (userRepo: Repository<User>, id): Promise<any> => {
   global.user = await userRepo.findOne({
     where: { id },
   });
-}
+};
 
-export async function getUsername(userRepo: Repository<User>) {
+export const getUsername = async (userRepo: Repository<User>) => {
   const username = rl.question('What is your username: ');
   if (!username) return getUsername(userRepo);
   const user = await userRepo.findOne({ username });
@@ -29,16 +27,10 @@ export async function getUsername(userRepo: Repository<User>) {
     return getUsername(userRepo);
   }
   return username;
-}
+};
 
-export function getFullName() {
-  const fullName = rl.question('What is your full name: ');
-  if (!fullName) return getFullName();
-  return fullName;
-}
-
-export function getPassword() {
+export const getPassword = () => {
   const password = rl.question('Type your password: ', { hideEchoBack: true });
   if (!password) return getPassword();
   return password;
-}
+};

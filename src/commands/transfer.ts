@@ -8,20 +8,18 @@ import { precisionRound } from '../utils/number';
 
 export default async (params: string[]) => {
   if (!userUtil.isLoggedIn()) {
-    console.log('You have to log in first');
-    return;
+    return ['You have to log in first'];
   }
   if (params.length < 2) {
-    console.log('Please input username destination and amount');
-    return;
+    return ['Please input username destination and amount'];
   }
+  const result = [];
   const userRepo = getCustomRepository(UserRepo);
   const debtRepo = getCustomRepository(DebtRepo);
   const destUsername = params[0];
   const amount = parseFloat(params[1]);
   if (Number.isNaN(amount)) {
-    console.log('You have to input number for the transfer amount');
-    return;
+    return ['You have to input number for the transfer amount'];
   }
   const user = userUtil.getUser();
   const dest = await userRepo.getOne({
@@ -29,8 +27,7 @@ export default async (params: string[]) => {
   });
 
   if (!dest) {
-    console.log('We can not find that username');
-    return;
+    return ['We can not find that username'];
   }
   let newBalance = 0;
   let debtAmount = 0;
@@ -61,8 +58,9 @@ export default async (params: string[]) => {
   await userRepo.update(user.id, { balance: newBalance });
   await userRepo.update(dest.id, { balance: precisionRound(dest.balance + amount) });
   await userUtil.refreshUser(userRepo, user.id);
-  console.log('Transferred', amount, 'to', destUsername);
+  result.push(`Transferred $${amount} to ${destUsername}`);
   const debts = await debtRepo.getDebts(user);
-  debtUtil.list(debts);
-  console.log('Your balance is', newBalance);
+  result.push(...debtUtil.list(debts));
+  result.push(`Your balance is $${newBalance}`);
+  return result;
 };

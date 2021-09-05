@@ -8,16 +8,14 @@ import { precisionRound } from '../utils/number';
 
 export default async (params: string[]) => {
   if (!userUtil.isLoggedIn()) {
-    console.log('You have to login first');
-    return;
+    return ['You have to login first'];
   }
   const user = userUtil.getUser();
   const amount = parseFloat(params[0]);
   if (Number.isNaN(amount)) {
-    console.log('You have to input number for deposit amount');
-    return;
+    return ['You have to input number for deposit amount'];
   }
-
+  const result = [];
   const debtRepo = getCustomRepository(DebtRepo);
   const userRepo = getCustomRepository(UserRepo);
 
@@ -42,7 +40,7 @@ export default async (params: string[]) => {
       await userRepo.update(debts[i].creditor.id, {
         balance: precisionRound(creditor.balance + transfer),
       });
-      console.log('Transferred', transfer, 'to', creditor.username);
+      result.push(`Transferred $${transfer} to ${creditor.username}`);
       i += 1;
     }
   }
@@ -51,6 +49,7 @@ export default async (params: string[]) => {
   });
   await userUtil.refreshUser(userRepo, user.id);
   debts = await debtRepo.getDebts(user);
-  debtUtil.list(debts);
-  console.log('Your balance is:', newBalance);
+  result.push(...debtUtil.list(debts));
+  result.push(`Your balance is: ${newBalance}`);
+  return result;
 };

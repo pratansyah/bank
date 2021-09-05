@@ -4,7 +4,14 @@ import createDatabaseConnection from './db';
 
 global.user = false;
 
-const recursePrompt = async () => {
+const printLines = (lines: string[]): void => {
+  lines.forEach((line) => {
+    console.log(line);
+  });
+  return null;
+};
+
+export const recursePrompt = async () => {
   const input = rl.question('\n> ').split(' ');
   if (input.length > 0) {
     const command = input[0];
@@ -12,7 +19,8 @@ const recursePrompt = async () => {
     if (command === 'exit') {
       console.log('Thank you for banking with us');
     } else if (commands[command]) {
-      await commands[command](input);
+      const lines = await commands[command](input);
+      printLines(lines);
       await recursePrompt();
     } else {
       console.log('No such command');
