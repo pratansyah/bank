@@ -5,6 +5,7 @@
   "main": "src/index.ts",
   "scripts": {
     "build": "rm -rf dist && eslint --ext .ts --fix src && tsc -p .",
+    "watch": "tsc --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "bin": {
@@ -13,15 +14,18 @@
   "author": "pratansyah@gmail.com",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.0.1",
     "colors": "^1.4.0",
-    "commander": "^8.1.0",
-    "inquirer": "^8.1.2",
+    "dotenv": "^10.0.0",
+    "readline-sync": "^1.4.10",
+    "sqlite3": "^5.0.2",
     "typeorm": "^0.2.37"
   },
   "engines": {
     "node": "12.x"
   },
   "devDependencies": {
+    "@types/node": "^16.7.10",
     "@typescript-eslint/eslint-plugin": "^4.30.0",
     "@typescript-eslint/parser": "^4.30.0",
     "eslint": "^5.16.0",
