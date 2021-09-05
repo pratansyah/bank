@@ -1,42 +1,18 @@
 import 'colors';
-import * as rl from 'readline-sync';
-import { getCustomRepository, Repository } from 'typeorm';
+import { getCustomRepository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
-import User from '../entities/user';
 import UserRepo from '../repositories/userRepo';
-
-const getUsername = async (userRepo: Repository<User>) => {
-  const username = rl.question('What is your username: ');
-  if (!username) return getUsername(userRepo);
-  const user = await userRepo.findOne({ username });
-  if (user) {
-    console.log('That username is already taken, please type another one'.red);
-    return getUsername(userRepo);
-  }
-  return username;
-};
-
-const getFullName = () => {
-  const fullName = rl.question('What is your full name: ');
-  if (!fullName) return getFullName();
-  return fullName;
-};
-
-const getPassword = () => {
-  const password = rl.question('Type your password: ', { hideEchoBack: true });
-  if (!password) return getPassword();
-  return password;
-};
+import * as userUtil from '../utils/user';
 
 export default async () => {
-  if (global.user) {
+  if (userUtil.isLoggedIn()) {
     console.log('Please log out before registering a new account');
     return;
   }
   const userRepo = await getCustomRepository(UserRepo);
-  const username = await getUsername(userRepo);
-  const name = getFullName();
-  const password = bcrypt.hashSync(getPassword(), bcrypt.genSaltSync(10));
+  const username = await userUtil.getUsername(userRepo);
+  const name = userUtil.getFullName();
+  const password = bcrypt.hashSync(userUtil.getPassword(), bcrypt.genSaltSync(10));
 
   await userRepo.save({
     fullName: name,

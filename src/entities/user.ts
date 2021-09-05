@@ -16,6 +16,9 @@ export default class User {
   @Column()
   password: string;
 
+  @Column('float', { precision: 50, scale: 2, default: 0 })
+  balance: number;
+
   @CreateDateColumn({
     type: 'datetime',
     precision: 0,

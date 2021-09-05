@@ -1,17 +1,10 @@
 import {
-  EntityRepository, FindManyOptions, FindOneOptions, Repository,
+  EntityRepository,
 } from 'typeorm';
 import User from '../entities/user';
+import RepoBase from './repoBase';
 
 @EntityRepository(User)
-export default class UserRepo extends Repository<User> {
-  async getOne(params: FindOneOptions) {
-    const user = await this.findOne(params);
-    return user;
-  }
+export default class UserRepo extends RepoBase<User> {
 
-  async get(params: FindManyOptions) {
-    const users = await this.find(params);
-    return users;
-  }
 }

@@ -18,7 +18,7 @@ export default class Debt {
   })
   creditor: User;
 
-  @Column()
+  @Column('float', { precision: 50, scale: 2, default: 0 })
   amount: number;
 
   @CreateDateColumn({

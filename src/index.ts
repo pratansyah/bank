@@ -5,7 +5,7 @@ import createDatabaseConnection from './db';
 global.user = false;
 
 const recursePrompt = async () => {
-  const input = rl.question('').split(' ');
+  const input = rl.question('\n> ').split(' ');
   if (input.length > 0) {
     const command = input[0];
     input.splice(0, 1);
