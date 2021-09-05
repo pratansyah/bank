@@ -32,7 +32,8 @@ export const recursePrompt = async () => {
 };
 
 (async () => {
-  await createDatabaseConnection();
-  // await commands.menu();
+  await createDatabaseConnection(`${__dirname}/../.data/data.sqlite`);
+  const menu = await commands.menu();
+  printLines(menu);
   await recursePrompt();
 })();

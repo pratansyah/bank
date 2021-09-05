@@ -10,8 +10,8 @@ export default async (params: string[]) => {
   if (!userUtil.isLoggedIn()) {
     return ['You have to login first'];
   }
-  const user = userUtil.getUser();
-  const amount = parseFloat(params[0]);
+  let user = userUtil.getUser();
+  const amount = Number(params[0]);
   if (Number.isNaN(amount)) {
     return ['You have to input number for deposit amount'];
   }
@@ -40,16 +40,16 @@ export default async (params: string[]) => {
       await userRepo.update(debts[i].creditor.id, {
         balance: precisionRound(creditor.balance + transfer),
       });
-      result.push(`Transferred $${transfer} to ${creditor.username}`);
+      result.push(`Transferred ${`$${transfer}`.green} to ${creditor.username}`);
       i += 1;
     }
   }
   await userRepo.update(user.id, {
     balance: newBalance,
   });
-  await userUtil.refreshUser(userRepo, user.id);
+  user = await userUtil.refreshUser(userRepo, user.id);
   debts = await debtRepo.getDebts(user);
   result.push(...debtUtil.list(debts));
-  result.push(`Your balance is: ${newBalance}`);
+  result.push(userUtil.getBalance(user));
   return result;
 };

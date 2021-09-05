@@ -16,6 +16,7 @@ export const refreshUser = async (userRepo: Repository<User>, id): Promise<any> 
   global.user = await userRepo.findOne({
     where: { id },
   });
+  return global.user;
 };
 
 export const getUsername = async (userRepo: Repository<User>) => {
@@ -23,8 +24,7 @@ export const getUsername = async (userRepo: Repository<User>) => {
   if (!username) return getUsername(userRepo);
   const user = await userRepo.findOne({ username });
   if (user) {
-    console.log('That username is already taken, please type another one'.red);
-    return getUsername(userRepo);
+    return false;
   }
   return username;
 };
@@ -34,3 +34,5 @@ export const getPassword = () => {
   if (!password) return getPassword();
   return password;
 };
+
+export const getBalance = (user: User) => `Your balance is: ${`$${user.balance}`.green}`;

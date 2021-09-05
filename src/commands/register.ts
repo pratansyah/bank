@@ -11,6 +11,7 @@ export default async () => {
   const result = [];
   const userRepo = await getCustomRepository(UserRepo);
   const username = await userUtil.getUsername(userRepo);
+  if (!username) return ['Username already taken, please try again'];
   const rawPass = userUtil.getPassword();
   const password = bcrypt.hashSync(rawPass, bcrypt.genSaltSync(10));
 

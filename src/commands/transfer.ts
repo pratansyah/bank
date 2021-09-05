@@ -17,11 +17,11 @@ export default async (params: string[]) => {
   const userRepo = getCustomRepository(UserRepo);
   const debtRepo = getCustomRepository(DebtRepo);
   const destUsername = params[0];
-  const amount = parseFloat(params[1]);
+  const amount = Number(params[1]);
   if (Number.isNaN(amount)) {
     return ['You have to input number for the transfer amount'];
   }
-  const user = userUtil.getUser();
+  let user = userUtil.getUser();
   const dest = await userRepo.getOne({
     where: { username: destUsername },
   });
@@ -57,10 +57,10 @@ export default async (params: string[]) => {
   }
   await userRepo.update(user.id, { balance: newBalance });
   await userRepo.update(dest.id, { balance: precisionRound(dest.balance + amount) });
-  await userUtil.refreshUser(userRepo, user.id);
-  result.push(`Transferred $${amount} to ${destUsername}`);
+  user = await userUtil.refreshUser(userRepo, user.id);
+  result.push(`Transferred ${`$${amount}`.green} to ${destUsername}`);
   const debts = await debtRepo.getDebts(user);
   result.push(...debtUtil.list(debts));
-  result.push(`Your balance is $${newBalance}`);
+  result.push(userUtil.getBalance(user));
   return result;
 };

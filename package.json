@@ -6,7 +6,7 @@
   "scripts": {
     "build": "rm -rf dist && eslint --ext .ts --fix src && tsc -p .",
     "watch": "tsc --watch",
-    "test": "jest"
+    "test": "jest --runInBand"
   },
   "bin": {
     "bank": "./dist/index.ts"

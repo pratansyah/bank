@@ -12,7 +12,6 @@ export default async (params: string[]) => {
   }
   const result = [];
   const username = params[0];
-  const password = userUtil.getPassword();
   const userRepo = getCustomRepository(UserRepo);
   const debtRepo = getCustomRepository(DebtRepo);
   const user = await userRepo.getOne({ where: { username } });
@@ -20,11 +19,12 @@ export default async (params: string[]) => {
   if (!user) {
     return ['We can not find that username, please try again'];
   }
+  const password = userUtil.getPassword();
   const matchPassword = bcrypt.compareSync(password, user.password);
   if (matchPassword) {
     global.user = user;
     result.push(`Hello ${user.username}`);
-    result.push(`Your balance is $${user.balance}`);
+    result.push(userUtil.getBalance(user));
     result.push(...debtUtil.list(debts));
   } else {
     return ['Wrong password'];

@@ -1,7 +1,9 @@
 import 'colors';
 
-export default () => {
-  let menu = 'test'.green;
-  menu += ' hiya'.blue;
-  console.log(menu);
-};
+export default () => [
+  'Available commands:',
+  'register',
+  'login [username]',
+  'deposit [amount]',
+  'transfer [username] [amount]',
+];
