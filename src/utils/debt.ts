@@ -1,4 +1,5 @@
 import Debt from '../entities/debt';
+import 'colors';
 
 export const list = (debts: Debt[]) => {
   const result = [];

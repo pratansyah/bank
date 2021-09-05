@@ -1,9 +1,13 @@
 import 'colors';
 
 export default () => [
+  '',
   'Available commands:',
-  'register',
-  'login [username]',
-  'deposit [amount]',
-  'transfer [username] [amount]',
+  'menu'.green,
+  'register'.green,
+  `${'login'.green} [username]`,
+  `${'deposit'.green} [amount]`,
+  `${'transfer'.green} [username] [amount]`,
+  'logout'.green,
+  'exit'.green,
 ];

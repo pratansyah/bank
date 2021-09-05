@@ -14,7 +14,7 @@ const printLines = (lines: string[]): void => {
 export const recursePrompt = async () => {
   const input = rl.question('\n> ').split(' ');
   if (input.length > 0) {
-    const command = input[0];
+    const command = input[0].toLowerCase();
     input.splice(0, 1);
     if (command === 'exit') {
       console.log('Thank you for banking with us');
